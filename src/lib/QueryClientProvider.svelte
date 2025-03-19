@@ -1,19 +1,25 @@
 <script lang="ts">
-  import { onDestroy, onMount } from 'svelte'
-  import { QueryClient } from '@tanstack/query-core'
-  import { setQueryClientContext } from './context.js'
+	import { type Snippet } from 'svelte';
+	import { QueryClient } from '@tanstack/query-core';
+	import { setQueryClientContext } from './context.js';
 
-  export let client = new QueryClient()
+	const {
+		children,
+		client = new QueryClient()
+	}: {
+		children: Snippet<[]>;
+		client?: QueryClient;
+	} = $props();
 
-  onMount(() => {
-    client.mount()
-  })
+	$effect(() => {
+		client.mount();
 
-  setQueryClientContext(client)
+		return () => {
+			client.unmount();
+		};
+	});
 
-  onDestroy(() => {
-    client.unmount()
-  })
+	setQueryClientContext(client);
 </script>
 
-<slot />
+{@render children()}
