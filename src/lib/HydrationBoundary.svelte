@@ -1,16 +1,21 @@
 <script lang="ts">
-  import { useHydrate } from './useHydrate.js'
-  import type {
-    DehydratedState,
-    HydrateOptions,
-    QueryClient,
-  } from '@tanstack/query-core'
+	import type { Snippet } from 'svelte';
+	import { useHydrate } from './useHydrate.js';
+	import type { DehydratedState, HydrateOptions, QueryClient } from '@tanstack/query-core';
 
-  export let state: DehydratedState
-  export let options: HydrateOptions | undefined = undefined
-  export let queryClient: QueryClient | undefined = undefined
+	const {
+		state,
+		options,
+		queryClient,
+		children
+	}: {
+		state: DehydratedState;
+		options: HydrateOptions | undefined;
+		queryClient: QueryClient | undefined;
+		children: Snippet<[]>;
+	} = $props();
 
-  useHydrate(state, options, queryClient)
+	useHydrate(state, options, queryClient);
 </script>
 
-<slot />
+{@render children()}
